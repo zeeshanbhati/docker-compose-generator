@@ -1,28 +1,58 @@
 {
-  "version": 1,
-  "services": {
-    "my-service": {
-      "build": {
-        "context": ".",
-        "dockerfile": "Dockerfile",
-        "args": {
-          "NODE_ENV": "development"
+  "source": {
+    "version": 1,
+    "services": [
+      {
+        "key": "my-service",
+        "value": {
+          "build": {
+            "context": ".",
+            "dockerfile": "Dockerfile",
+            "args": [{ "key": "NODE_ENV", "value": "development" }]
+          },
+          "container_name": "OK",
+          "image": "YO",
+          "volumes": "",
+          "ports": [{ "container_port": 3000, "host_port": 3000 }],
+          "command": "npm run dev",
+          "depends_on": [""],
+          "environment": [{ "key": "NODE_ENV", "value": "development" }],
+          "healthcheck": {
+            "test": "curl --fail http://localhost:3000 || exit 1",
+            "interval": "30s",
+            "timeout": "10s",
+            "retries": 5
+          }
         }
-      },
-      "container_name": "OK",
-      "image": "YO",
-      "volumes": "",
-      "ports": ["3000:3000"],
-      "command": "npm run dev",
-      "depends_on": [""],
-      "environment": {
-        "NODE_ENV": "development"
-      },
-      "healthcheck": {
-        "test": "curl --fail http://localhost:3000 || exit 1",
-        "interval": "30s",
-        "timeout": "10s",
-        "retries": 5
+      }
+    ]
+  },
+  "dest": {
+    "version": 1,
+    "services": {
+      "my-service": {
+        "build": {
+          "context": ".",
+          "dockerfile": "Dockerfile",
+          "args": {
+            "NODE_ENV": "development"
+          }
+        },
+        "container_name": "OK",
+        "image": "YO",
+        "volumes": "",
+        "ports": ["3000:3000"],
+        "command": "npm run dev",
+        "depends_on": [""],
+        "environment": {
+          "NODE_ENV": "development"
+        },
+        "healthcheck": {
+          "test": "curl --fail http://localhost:3000 || exit 1",
+          "interval": "30s",
+          "timeout": "10s",
+          "retries": 5
+        }
       }
     }
   }
