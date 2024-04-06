@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "services": {
+    "my-service": {
+      "build": {
+        "context": ".",
+        "dockerfile": "Dockerfile",
+        "args": {
+          "NODE_ENV": "development"
+        }
+      },
+      "container_name": "OK",
+      "image": "YO",
+      "volumes": "",
+      "ports": ["3000:3000"],
+      "command": "npm run dev",
+      "depends_on": [""],
+      "healthcheck": {
+        "test": "curl --fail http://localhost:3000 || exit 1",
+        "interval": "30s",
+        "timeout": "10s",
+        "retries": 5,
+        "environment": {
+          "NODE_ENV": "development"
+        }
+      }
+    }
+  }
+}
