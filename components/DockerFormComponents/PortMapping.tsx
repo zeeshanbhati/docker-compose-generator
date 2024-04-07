@@ -25,6 +25,7 @@ export const PortMapping = ({ serviceIndex }: { serviceIndex: number }) => {
           />
         </div>
       ))}
+      <button onClick={append}>Add Port Mapping</button>
     </>
   );
 };

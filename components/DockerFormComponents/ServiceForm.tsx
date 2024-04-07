@@ -34,7 +34,7 @@ export const ServiceForm = () => {
               Add Build Steps
             </label>
           </div>
-          <BuildForm />
+          <BuildForm serviceIndex={index} />
           <Label>Container Name</Label>
           <Input
             placeholder="node-app-container"
@@ -51,11 +51,40 @@ export const ServiceForm = () => {
           <VolumeMapping serviceIndex={index} />
 
           <Label>Depends On</Label>
-          <Input placeholder="containerName"></Input>
+          <Input
+            placeholder="containerName"
+            {...register(`service[${index}]`)}
+          ></Input>
           <HealthCheckForm />
         </div>
       ))}
       <button onClick={append}>Add</button>
     </>
+  );
+};
+
+const BuildDependencies = ({ serviceIndex }: { serviceIndex: number }) => {
+  const methods = useFormContext();
+  const { register, control } = methods;
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: `services[${serviceIndex}].build.dependsOn`,
+  });
+  return (
+    <div>
+      <Label>Build Dependencies</Label>
+      {fields.map((field, index) => {
+        return (
+          <Input
+            placeholder="Build Dependencies"
+            key={field.id}
+            {...register(
+              `services[${serviceIndex}].build.dependsOn[${index}]`,
+              { required: true }
+            )}
+          />
+        );
+      })}
+    </div>
   );
 };

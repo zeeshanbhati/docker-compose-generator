@@ -15,7 +15,7 @@
           "volumes": "",
           "ports": [{ "container_port": 3000, "host_port": 3000 }],
           "command": "npm run dev",
-          "depends_on": [""],
+          "depends_on": [{ "key": "" }],
           "environment": [{ "key": "NODE_ENV", "value": "development" }],
           "healthcheck": {
             "test": "curl --fail http://localhost:3000 || exit 1",

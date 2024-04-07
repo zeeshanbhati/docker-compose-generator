@@ -27,6 +27,7 @@ export const VolumeMapping = ({ serviceIndex }: { serviceIndex: number }) => {
           />
         </div>
       ))}
+      <button onClick={append}>Add Volumes</button>
     </>
   );
 };

@@ -8,11 +8,16 @@ import { FormProvider, useForm } from "react-hook-form";
 export default function Home() {
   const methods = useForm();
 
+  const onSubmit = (data: unknown) => {
+    console.log(JSON.stringify(data));
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="grid w-full max-w-sm items-center gap-1.5">
         <h1 className=" text-3xl"> Docker-Compose.yml</h1>
         <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)} />
           <div className="mt-10 space-y-4">
             <div>
               <Label className="">Version</Label>
@@ -24,6 +29,7 @@ export default function Home() {
               <ServiceForm />
             </div>
           </div>
+          <form />
         </FormProvider>
       </div>
     </main>
