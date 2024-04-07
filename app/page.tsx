@@ -19,15 +19,14 @@ export default function Home() {
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} />
           <div className="mt-10 space-y-4">
-            <div>
+            <div className="space-y-2">
               <Label className="">Version</Label>
               <Input id="version" placeholder="version" />
             </div>
 
             <h1 className=""> Service Form </h1>
-            <div className="space-y-2">
-              <ServiceForm />
-            </div>
+
+            <ServiceForm />
           </div>
           <form />
         </FormProvider>

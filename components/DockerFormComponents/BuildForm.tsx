@@ -1,7 +1,8 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useFormContext } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { useFieldArray, useFormContext } from "react-hook-form";
 
 export const BuildForm = ({ serviceIndex }: { serviceIndex: number }) => {
   const methods = useFormContext();
@@ -27,11 +28,31 @@ export const BuildForm = ({ serviceIndex }: { serviceIndex: number }) => {
 
 const BuildArguments = ({ serviceIndex }: { serviceIndex: number }) => {
   const methods = useFormContext();
-  const { register } = methods;
+  const { register, control } = methods;
+  const { fields, remove, append } = useFieldArray({
+    control,
+    name: `services[${serviceIndex}].build.args`,
+  });
+
   return (
-    <div className="flex space-x-2">
-      <Input placeholder="key"></Input>
-      <Input placeholder="value"></Input>
-    </div>
+    <>
+      {fields.map((field, index) => (
+        <div key={field.id} className="flex space-x-2">
+          <Input
+            placeholder="key"
+            {...register(`services[${serviceIndex}].build.args[${index}].key`)}
+          />
+          <Input
+            placeholder="value"
+            {...register(
+              `services[${serviceIndex}].build.args[${index}].value`
+            )}
+          />
+          <Button onClick={() => remove(index)}>Remove</Button>
+        </div>
+      ))}
+
+      <Button onClick={append}>Add</Button>
+    </>
   );
 };
