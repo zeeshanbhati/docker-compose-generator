@@ -1,33 +1,34 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 
 export const VolumeMapping = ({ serviceIndex }: { serviceIndex: number }) => {
-  const { register, control } = useFormContext();
+  const { register } = useFormContext();
   const { fields, append, remove } = useFieldArray({
-    control,
     name: `services[${serviceIndex}].volume`,
   });
   return (
-    <>
-      <Label>Volumes</Label>
+    <div className="space-y-2">
+      <Label className="block">Volumes</Label>
       {fields.map((field, index) => (
         <div key={field.id} className="flex space-x-2">
           <Input
             placeholder="host mount path"
             {...register(
-              `services[${serviceIndex}].volumes[${index}].hostPath`
+              `services[${serviceIndex}].value.volumes[${index}].host_path`
             )}
           />
           <Input
             placeholder="ContainerPath"
             {...register(
-              `services[${serviceIndex}].volumes[${index}].containerPath`
+              `services[${serviceIndex}].value.volumes[${index}].container_path`
             )}
           />
+          <Button onClick={() => remove(index)}>Remove</Button>
         </div>
       ))}
-      <button onClick={append}>Add Volumes</button>
-    </>
+      <Button onClick={append}>Add Volumes</Button>
+    </div>
   );
 };

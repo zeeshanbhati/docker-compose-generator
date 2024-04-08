@@ -9,29 +9,36 @@ export const BuildForm = ({ serviceIndex }: { serviceIndex: number }) => {
   const { register } = methods;
 
   return (
-    <div>
-      <Label> Context</Label>
-      <Input
-        placeholder="Context"
-        {...register(`services[${serviceIndex}].build.context`)}
-      />
+    <div className="space-y-4">
+      <div>
+        <Label> Context</Label>
+        <Input
+          placeholder="Context"
+          {...register(`services[${serviceIndex}].value.build.context`)}
+        />
+      </div>
 
-      <Label>DockerFile path</Label>
-      <Input
-        placeholder="Dockerfile Path"
-        {...register(`services[${serviceIndex}].build.dockerfilePath`)}
-      />
-      <Label>Arguments</Label>
+      <div>
+        <Label>DockerFile path</Label>
+        <Input
+          placeholder="Dockerfile Path"
+          {...register(`services[${serviceIndex}].value.build.dockerfile`)}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label className="block">Arguments</Label>
+        <BuildArguments serviceIndex={serviceIndex} />
+      </div>
     </div>
   );
 };
 
 const BuildArguments = ({ serviceIndex }: { serviceIndex: number }) => {
   const methods = useFormContext();
-  const { register, control } = methods;
+  const { register } = methods;
   const { fields, remove, append } = useFieldArray({
-    control,
-    name: `services[${serviceIndex}].build.args`,
+    name: `services[${serviceIndex}].value.build.args`,
   });
 
   return (
@@ -40,12 +47,14 @@ const BuildArguments = ({ serviceIndex }: { serviceIndex: number }) => {
         <div key={field.id} className="flex space-x-2">
           <Input
             placeholder="key"
-            {...register(`services[${serviceIndex}].build.args[${index}].key`)}
+            {...register(
+              `services[${serviceIndex}].value.build.args[${index}].key`
+            )}
           />
           <Input
             placeholder="value"
             {...register(
-              `services[${serviceIndex}].build.args[${index}].value`
+              `services[${serviceIndex}].value.build.args[${index}].value`
             )}
           />
           <Button onClick={() => remove(index)}>Remove</Button>

@@ -5,6 +5,7 @@
       {
         "key": "my-service",
         "value": {
+          "buildRequired": true,
           "build": {
             "context": ".",
             "dockerfile": "Dockerfile",
@@ -12,7 +13,7 @@
           },
           "container_name": "OK",
           "image": "YO",
-          "volumes": "",
+          "volumes": [{ "container_path": "", "host_path": "" }],
           "ports": [{ "container_port": 3000, "host_port": 3000 }],
           "command": "npm run dev",
           "depends_on": [{ "key": "" }],
