@@ -61,7 +61,9 @@ const BuildArguments = ({ serviceIndex }: { serviceIndex: number }) => {
         </div>
       ))}
 
-      <Button onClick={append}>Add</Button>
+      <Button type="button" onClick={append}>
+        Add
+      </Button>
     </>
   );
 };

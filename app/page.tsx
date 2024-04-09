@@ -3,8 +3,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ServiceForm } from "@/components/DockerFormComponents/ServiceForm";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { IDockerForm } from "@/types";
+import { Button } from "@/components/ui/button";
 
 const initialData: IDockerForm = {
   version: "1",
@@ -13,10 +14,46 @@ const initialData: IDockerForm = {
 
 export default function Home() {
   const methods = useForm({ defaultValues: initialData });
+  const { register, control } = methods;
+  const { fields, remove, append } = useFieldArray({
+    control,
+    name: "services",
+  });
 
   const onSubmit = (data: unknown) => {
     console.log("Works");
-    console.log("data");
+    console.log(data);
+  };
+
+  const appendService = () => {
+    append({
+      key: "",
+      value: {
+        container_name: "",
+        buildRequired: false,
+        build: {
+          context: "",
+          dockerfile: "",
+          args: [],
+        },
+        image: "",
+        ports: [],
+        environment: [],
+        volumes: [],
+        command: "",
+        depends_on: [],
+        healthcheck: {
+          test: "",
+          interval: "",
+          timeout: "",
+          retries: "",
+        },
+      },
+    });
+  };
+
+  const removeService = (index: number) => {
+    remove(index);
   };
 
   return (
@@ -36,8 +73,15 @@ export default function Home() {
               </div>
 
               <h1 className=""> Service Form </h1>
-
-              <ServiceForm />
+              {fields.map((service: any, index: number) => (
+                <div key={service.id}>
+                  <ServiceForm index={index} />
+                  <Button onClick={() => removeService(index)} />
+                </div>
+              ))}
+              <Button type="button" onClick={appendService}>
+                Add
+              </Button>
             </div>
             {/* <button type="submit">Submit</button> */}
           </form>
