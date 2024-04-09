@@ -7,6 +7,12 @@ import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { IDockerForm } from "@/types";
 import { Button } from "@/components/ui/button";
 import { convertToDestObject } from "@/functions/composeParser";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const initialData: IDockerForm = {
   version: "1",
@@ -58,13 +64,32 @@ export default function Home() {
 
               <h1 className=""> Service Form </h1>
               {fields.map((service: any, index: number) => (
-                <div key={service.id} className="space-y-2">
-                  <ServiceForm index={index} />
-                  <Button onClick={() => removeService(index)}>
-                    {" "}
-                    Remove Service{" "}
-                  </Button>
-                </div>
+                <Accordion
+                  type="single"
+                  collapsible
+                  className="w-full"
+                  key={service.id}
+                >
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>Service</AccordionTrigger>
+                    <AccordionContent>
+                      <div key={service.id} className="space-y-2">
+                        <ServiceForm index={index} />
+                        <Button onClick={() => removeService(index)}>
+                          {" "}
+                          Remove Service{" "}
+                        </Button>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+                // <div key={service.id} className="space-y-2">
+                //   <ServiceForm index={index} />
+                //   <Button onClick={() => removeService(index)}>
+                //     {" "}
+                //     Remove Service{" "}
+                //   </Button>
+                // </div>
               ))}
               <Button type="button" onClick={appendService}>
                 Add
