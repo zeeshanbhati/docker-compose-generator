@@ -57,7 +57,9 @@ const BuildArguments = ({ serviceIndex }: { serviceIndex: number }) => {
               `services[${serviceIndex}].value.build.args[${index}].value`
             )}
           />
-          <Button onClick={() => remove(index)}>Remove</Button>
+          <Button type="button" onClick={() => remove(index)}>
+            Remove
+          </Button>
         </div>
       ))}
 

@@ -5,20 +5,20 @@ export interface IDockerForm {
 
 interface IService {
   key: string;
+  buildRequired: boolean;
   value: IServiceValue;
 }
 
-interface IServiceValue {
-  container_name: string;
-  buildRequired: boolean;
+export interface IServiceValue {
+  container_name?: string;
   image?: string;
-  command: string;
+  command?: string;
   build?: IBuild | null;
-  ports: IPort[];
-  volumes: IVolume[];
-  depends_on: IDependsOn[];
-  environment: IKeyValue[];
-  healthcheck: IHealthCheck;
+  ports?: IPort[];
+  volumes?: IVolume[];
+  depends_on?: IDependsOn[];
+  environment?: IKeyValue[];
+  healthcheck?: IHealthCheck;
 }
 
 interface IBuild {
@@ -33,7 +33,7 @@ export interface IKeyValue {
 }
 
 interface IPort {
-  container_path: string;
+  container_port: string;
   host_port: string;
 }
 

@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { BuildForm } from "./BuildForm";
 import { HealthCheckForm } from "./HealthCheck";
 import {
+  Controller,
   useFieldArray,
   useForm,
   useFormContext,
@@ -13,19 +14,21 @@ import {
 import { PortMapping } from "./PortMapping";
 import { VolumeMapping } from "./VolumeMapping";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+
+let x = 0;
 
 export const ServiceForm = ({ index }: { index: number }) => {
   const methods = useFormContext();
-  const { register, getValues, setValue, control, watch } = methods;
-  const { fields, remove, append } = useFieldArray({
-    control,
-    name: `services[${index}]`,
-  });
-  const at = useWatch({ name: `services[${index}]` });
+  const { register, setValue } = methods;
+  const [buildRequired, setBuildRequired] = useState(false);
 
-  //console.log(watch("services"));
+  console.log(++x);
 
-  console.log(getValues(`services[0].value.buildRequired`));
+  const handleCheckChange = (e: any) => {
+    setValue(`services[${index}].buildRequired`, e);
+    setBuildRequired(e);
+  };
 
   return (
     <div className="space-y-4">
@@ -47,10 +50,7 @@ export const ServiceForm = ({ index }: { index: number }) => {
       </div>
 
       <div className="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          {...register(`services[${index}].value.buildRequired`)}
-        />
+        <Checkbox onCheckedChange={handleCheckChange} />
         <label
           htmlFor="terms2"
           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -59,11 +59,9 @@ export const ServiceForm = ({ index }: { index: number }) => {
         </label>
       </div>
 
-      {getValues(`services[${index}].value.buildRequired`) && (
-        <BuildForm serviceIndex={index} />
-      )}
+      {buildRequired && <BuildForm serviceIndex={index} />}
 
-      {!getValues(`services[${index}].value.buildRequired`) && (
+      {!buildRequired && (
         <div>
           <Label>Image Name</Label>
           <Input
@@ -219,6 +217,15 @@ const BuildDependencies = ({ serviceIndex }: { serviceIndex: number }) => {
   const { fields, append, remove } = useFieldArray({
     name: `services[${serviceIndex}].depends_on`,
   });
+
+  const addDependsOn = () => {
+    append({ key: "" });
+  };
+
+  const removeDependsOn = (index: number) => {
+    remove(index);
+  };
+
   return (
     <div className="space-y-2">
       <Label className="block">Depends On</Label>
@@ -229,24 +236,35 @@ const BuildDependencies = ({ serviceIndex }: { serviceIndex: number }) => {
               placeholder="Build Dependencies"
               key={field.id}
               {...register(
-                `services[${serviceIndex}].value.build.depends_on[${index}].key`
+                `services[${serviceIndex}].value.depends_on[${index}].key`
               )}
             />
-            <Button onClick={() => remove(index)} />
+            <Button type="button" onClick={() => removeDependsOn(index)} />
           </div>
         );
       })}
-      <Button onClick={append}>Add</Button>
+      <Button type="button" onClick={addDependsOn}>
+        Add
+      </Button>
     </div>
   );
 };
 
 const EnvironmentVariables = ({ serviceIndex }: { serviceIndex: number }) => {
   const methods = useFormContext();
-  const { register } = methods;
+  const { register, control } = methods;
   const { fields, append, remove } = useFieldArray({
+    control,
     name: `services[${serviceIndex}].value.environment`,
   });
+
+  const addEnv = () => {
+    append({ key: "", value: "" });
+  };
+
+  const removeEnv = (index: number) => {
+    remove(index);
+  };
   return (
     <div className="space-y-2">
       <Label className="block">Environment Variables</Label>
@@ -265,11 +283,15 @@ const EnvironmentVariables = ({ serviceIndex }: { serviceIndex: number }) => {
                 `services[${serviceIndex}].value.environment[${index}].value`
               )}
             />
-            <Button onClick={() => remove(index)} />
+            <Button type="button" onClick={() => removeEnv(index)}>
+              Remove
+            </Button>
           </div>
         );
       })}
-      <Button onClick={append}>Add</Button>
+      <Button type="button" onClick={addEnv}>
+        Add
+      </Button>
     </div>
   );
 };

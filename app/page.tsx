@@ -6,6 +6,7 @@ import { ServiceForm } from "@/components/DockerFormComponents/ServiceForm";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { IDockerForm } from "@/types";
 import { Button } from "@/components/ui/button";
+import { convertToDestObject } from "@/functions/composeParser";
 
 const initialData: IDockerForm = {
   version: "1",
@@ -20,35 +21,18 @@ export default function Home() {
     name: "services",
   });
 
-  const onSubmit = (data: unknown) => {
-    console.log("Works");
-    console.log(data);
+  const onSubmit = (data: IDockerForm) => {
+    //console.log(data);
+    //console.log("=========================");
+    const res = convertToDestObject(data);
+    console.log(res);
   };
 
   const appendService = () => {
     append({
       key: "",
-      value: {
-        container_name: "",
-        buildRequired: false,
-        build: {
-          context: "",
-          dockerfile: "",
-          args: [],
-        },
-        image: "",
-        ports: [],
-        environment: [],
-        volumes: [],
-        command: "",
-        depends_on: [],
-        healthcheck: {
-          test: "",
-          interval: "",
-          timeout: "",
-          retries: "",
-        },
-      },
+      buildRequired: false,
+      value: {},
     });
   };
 
@@ -74,16 +58,21 @@ export default function Home() {
 
               <h1 className=""> Service Form </h1>
               {fields.map((service: any, index: number) => (
-                <div key={service.id}>
+                <div key={service.id} className="space-y-2">
                   <ServiceForm index={index} />
-                  <Button onClick={() => removeService(index)} />
+                  <Button onClick={() => removeService(index)}>
+                    {" "}
+                    Remove Service{" "}
+                  </Button>
                 </div>
               ))}
               <Button type="button" onClick={appendService}>
                 Add
               </Button>
             </div>
-            {/* <button type="submit">Submit</button> */}
+            <Button type="submit" className="mt-4">
+              Submit
+            </Button>
           </form>
         </FormProvider>
       </div>

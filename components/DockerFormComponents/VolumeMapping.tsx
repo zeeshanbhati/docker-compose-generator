@@ -25,10 +25,14 @@ export const VolumeMapping = ({ serviceIndex }: { serviceIndex: number }) => {
               `services[${serviceIndex}].value.volumes[${index}].container_path`
             )}
           />
-          <Button onClick={() => remove(index)}>Remove</Button>
+          <Button type="button" onClick={() => remove(index)}>
+            Remove
+          </Button>
         </div>
       ))}
-      <Button onClick={append}>Add Volumes</Button>
+      <Button type="button" onClick={append}>
+        Add Volumes
+      </Button>
     </div>
   );
 };
