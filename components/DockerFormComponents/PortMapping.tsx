@@ -2,6 +2,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { CircleX } from "lucide-react";
 export const PortMapping = ({ serviceIndex }: { serviceIndex: number }) => {
   const { register, control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
@@ -34,13 +35,18 @@ export const PortMapping = ({ serviceIndex }: { serviceIndex: number }) => {
               `services[${serviceIndex}].value.ports[${index}].host_port`
             )}
           />
-          <Button type="button" onClick={() => removePortMapping(index)}>
-            Remove
+          <Button
+            size={"icon"}
+            type="button"
+            variant={"ghost"}
+            onClick={() => removePortMapping(index)}
+          >
+            <CircleX color={"#2580F7"} />
           </Button>
         </div>
       ))}
       <Button type="button" onClick={addPortMapping}>
-        Add
+        Add Port
       </Button>
     </div>
   );

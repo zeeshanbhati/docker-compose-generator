@@ -15,6 +15,7 @@ import { PortMapping } from "./PortMapping";
 import { VolumeMapping } from "./VolumeMapping";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { CircleX } from "lucide-react";
 
 let x = 0;
 
@@ -231,7 +232,7 @@ const BuildDependencies = ({ serviceIndex }: { serviceIndex: number }) => {
       <Label className="block">Depends On</Label>
       {fields.map((field, index) => {
         return (
-          <div key={field.id} className="space-y-2">
+          <div key={field.id} className="flex space-x-2">
             <Input
               placeholder="Build Dependencies"
               key={field.id}
@@ -239,7 +240,14 @@ const BuildDependencies = ({ serviceIndex }: { serviceIndex: number }) => {
                 `services[${serviceIndex}].value.depends_on[${index}].key`
               )}
             />
-            <Button type="button" onClick={() => removeDependsOn(index)} />
+            <Button
+              size={"icon"}
+              variant={"ghost"}
+              type="button"
+              onClick={() => removeDependsOn(index)}
+            >
+              <CircleX color={"#2580F7"} />
+            </Button>
           </div>
         );
       })}
@@ -270,7 +278,7 @@ const EnvironmentVariables = ({ serviceIndex }: { serviceIndex: number }) => {
       <Label className="block">Environment Variables</Label>
       {fields.map((field, index) => {
         return (
-          <div key={field.id}>
+          <div key={field.id} className="flex space-x-2">
             <Input
               placeholder="Key"
               {...register(
@@ -283,14 +291,19 @@ const EnvironmentVariables = ({ serviceIndex }: { serviceIndex: number }) => {
                 `services[${serviceIndex}].value.environment[${index}].value`
               )}
             />
-            <Button type="button" onClick={() => removeEnv(index)}>
-              Remove
+            <Button
+              size={"icon"}
+              variant={"ghost"}
+              type="button"
+              onClick={() => removeEnv(index)}
+            >
+              <CircleX color={"#2580F7"} />
             </Button>
           </div>
         );
       })}
       <Button type="button" onClick={addEnv}>
-        Add
+        Add Env
       </Button>
     </div>
   );

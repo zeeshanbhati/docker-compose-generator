@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { CircleX } from "lucide-react";
 
 export const VolumeMapping = ({ serviceIndex }: { serviceIndex: number }) => {
   const { register } = useFormContext();
@@ -25,13 +26,18 @@ export const VolumeMapping = ({ serviceIndex }: { serviceIndex: number }) => {
               `services[${serviceIndex}].value.volumes[${index}].container_path`
             )}
           />
-          <Button type="button" onClick={() => remove(index)}>
-            Remove
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            type="button"
+            onClick={() => remove(index)}
+          >
+            <CircleX color={"#2580F7"} />
           </Button>
         </div>
       ))}
       <Button type="button" onClick={append}>
-        Add Volumes
+        Add Volume
       </Button>
     </div>
   );

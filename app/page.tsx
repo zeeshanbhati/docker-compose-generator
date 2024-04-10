@@ -13,6 +13,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { CircleX } from "lucide-react";
+import yaml from "yaml";
+import jsyaml from "js-yaml";
+import MyComponent from "@/components/Visual";
+import { useState } from "react";
 
 const initialData: IDockerForm = {
   version: "1",
@@ -26,11 +31,22 @@ export default function Home() {
     control,
     name: "services",
   });
+  const [yamlData, setYamlData] = useState<string>();
+
+  const stringifyToYaml = (obj: any) => {
+    try {
+      const yamlString = jsyaml.dump(obj);
+      setYamlData(yamlString);
+    } catch (error) {
+      console.error("Error stringifying to YAML:", error);
+    }
+  };
 
   const onSubmit = (data: IDockerForm) => {
     //console.log(data);
     //console.log("=========================");
     const res = convertToDestObject(data);
+    stringifyToYaml(res);
     console.log(res);
   };
 
@@ -47,8 +63,8 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="grid w-full max-w-sm items-center gap-1.5">
+    <main className="flex min-h-screen flex-row items-start justify-around p-24 ">
+      <div className="grid w-1/4 min-w-sm items-center gap-1.5">
         <h1 className=" text-3xl"> Docker-Compose.yml</h1>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -71,25 +87,25 @@ export default function Home() {
                   key={service.id}
                 >
                   <AccordionItem value="item-1">
-                    <AccordionTrigger>Service</AccordionTrigger>
-                    <AccordionContent>
-                      <div key={service.id} className="space-y-2">
-                        <ServiceForm index={index} />
-                        <Button onClick={() => removeService(index)}>
-                          {" "}
-                          Remove Service{" "}
+                    <AccordionTrigger>
+                      <div className="w-full px-2 flex items-center justify-between">
+                        <Label className="text-lg">Service</Label>
+                        <Button
+                          size="icon"
+                          variant={"ghost"}
+                          onClick={() => removeService(index)}
+                        >
+                          <CircleX color={"#2580F7"} />
                         </Button>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div key={service.id} className="space-y-2 px-2">
+                        <ServiceForm index={index} />
                       </div>
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
-                // <div key={service.id} className="space-y-2">
-                //   <ServiceForm index={index} />
-                //   <Button onClick={() => removeService(index)}>
-                //     {" "}
-                //     Remove Service{" "}
-                //   </Button>
-                // </div>
               ))}
               <Button type="button" onClick={appendService}>
                 Add
@@ -100,6 +116,9 @@ export default function Home() {
             </Button>
           </form>
         </FormProvider>
+      </div>
+      <div className="bg-grey-900 text-lg font-semibold w-1/4">
+        <pre>{yamlData}</pre>
       </div>
     </main>
   );

@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { CircleX } from "lucide-react";
 
 export const BuildForm = ({ serviceIndex }: { serviceIndex: number }) => {
   const methods = useFormContext();
@@ -57,14 +58,19 @@ const BuildArguments = ({ serviceIndex }: { serviceIndex: number }) => {
               `services[${serviceIndex}].value.build.args[${index}].value`
             )}
           />
-          <Button type="button" onClick={() => remove(index)}>
-            Remove
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            type="button"
+            onClick={() => remove(index)}
+          >
+            <CircleX color={"#2580F7"} />
           </Button>
         </div>
       ))}
 
       <Button type="button" onClick={append}>
-        Add
+        Add Arg
       </Button>
     </>
   );
