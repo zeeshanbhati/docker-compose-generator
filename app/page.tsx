@@ -18,6 +18,12 @@ import yaml from "yaml";
 import jsyaml from "js-yaml";
 import MyComponent from "@/components/Visual";
 import { useState } from "react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTheme } from "next-themes";
+import dynamic from "next/dynamic";
+import AceEditor from "react-ace";
+import "ace-builds/src-noconflict/mode-yaml";
+import "ace-builds/src-noconflict/theme-dracula";
 
 const initialData: IDockerForm = {
   version: "1",
@@ -63,62 +69,72 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-row items-start justify-around p-24 ">
-      <div className="grid w-1/4 min-w-sm items-center gap-1.5">
-        <h1 className=" text-3xl"> Docker-Compose.yml</h1>
-        <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <div className="mt-10 space-y-4">
-              <div className="space-y-2">
-                <Label className="">Version</Label>
-                <Input
-                  id="version"
-                  placeholder="version"
-                  {...methods.register(`version`)}
-                />
-              </div>
+    <main className="flex h-screen flex-row items-start justify-around">
+      <div className="grid w-1/4 min-w-sm items-start gap-1.5">
+        <ScrollArea className="h-screen pt-12 px-12 relative">
+          <h1 className=" text-3xl"> Docker-Compose.yml</h1>
+          <FormProvider {...methods}>
+            <form onSubmit={methods.handleSubmit(onSubmit)}>
+              <div className="mt-10 space-y-4">
+                <div className="space-y-2">
+                  <Label className="">Version</Label>
+                  <Input
+                    id="version"
+                    placeholder="version"
+                    {...methods.register(`version`)}
+                  />
+                </div>
 
-              <h1 className=""> Service Form </h1>
-              {fields.map((service: any, index: number) => (
-                <Accordion
-                  type="single"
-                  collapsible
-                  className="w-full"
-                  key={service.id}
-                >
-                  <AccordionItem value="item-1">
-                    <AccordionTrigger>
-                      <div className="w-full px-2 flex items-center justify-between">
-                        <Label className="text-lg">Service</Label>
-                        <Button
-                          size="icon"
-                          variant={"ghost"}
-                          onClick={() => removeService(index)}
-                        >
-                          <CircleX color={"#2580F7"} />
-                        </Button>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div key={service.id} className="space-y-2 px-2">
-                        <ServiceForm index={index} />
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              ))}
-              <Button type="button" onClick={appendService}>
-                Add
+                <h1 className="py-2"> Service Form </h1>
+
+                {fields.map((service: any, index: number) => (
+                  <Accordion
+                    type="single"
+                    collapsible
+                    className="w-full"
+                    key={service.id}
+                  >
+                    <AccordionItem value="item-1">
+                      <AccordionTrigger>
+                        <div className="w-full px-2 flex items-center justify-between">
+                          <Label className="text-lg">Service</Label>
+                          <Button
+                            size="icon"
+                            variant={"ghost"}
+                            onClick={() => removeService(index)}
+                          >
+                            <CircleX color={"#2580F7"} />
+                          </Button>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div key={service.id} className="space-y-2 px-2">
+                          <ServiceForm index={index} />
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                ))}
+
+                <Button type="button" onClick={appendService}>
+                  Add
+                </Button>
+              </div>
+              <Button type="submit" className="my-4">
+                Submit
               </Button>
-            </div>
-            <Button type="submit" className="mt-4">
-              Submit
-            </Button>
-          </form>
-        </FormProvider>
+            </form>
+          </FormProvider>
+        </ScrollArea>
       </div>
-      <div className="bg-grey-900 text-lg font-semibold w-1/4">
-        <pre>{yamlData}</pre>
+      <div className="mt-20 pt-12 px-12 bg-grey-900 text-lg font-semibold w-1/2">
+        <AceEditor
+          mode="yaml"
+          theme="dracula" // Choose your preferred theme
+          value={yamlData}
+          readOnly={true} // Make the editor read-only if needed
+          style={{ width: "100%", height: "600px" }} // Adjust the size as needed
+        />
       </div>
     </main>
   );
