@@ -13,7 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { CircleX } from "lucide-react";
+import { CircleX, Divide } from "lucide-react";
 import yaml from "yaml";
 import jsyaml from "js-yaml";
 import MyComponent from "@/components/Visual";
@@ -24,6 +24,10 @@ import dynamic from "next/dynamic";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-yaml";
 import "ace-builds/src-noconflict/theme-dracula";
+import 'ace-builds/src-noconflict/theme-github'
+
+import Header from "@/components/DockerFormComponents/Header";
+import "./globals.css";
 
 const initialData: IDockerForm = {
   version: "1",
@@ -31,6 +35,7 @@ const initialData: IDockerForm = {
 };
 
 export default function Home() {
+  const {theme} = useTheme();
   const methods = useForm({ defaultValues: initialData });
   const { register, control } = methods;
   const { fields, remove, append } = useFieldArray({
@@ -38,6 +43,11 @@ export default function Home() {
     name: "services",
   });
   const [yamlData, setYamlData] = useState<string>();
+  
+
+
+
+
 
   const stringifyToYaml = (obj: any) => {
     try {
@@ -48,6 +58,8 @@ export default function Home() {
     }
   };
 
+
+
   const onSubmit = (data: IDockerForm) => {
     //console.log(data);
     //console.log("=========================");
@@ -55,6 +67,8 @@ export default function Home() {
     stringifyToYaml(res);
     console.log(res);
   };
+
+ 
 
   const appendService = () => {
     append({
@@ -69,13 +83,15 @@ export default function Home() {
   };
 
   return (
-    <main className="flex h-screen flex-row items-start justify-around overflow-hidden">
-      <div className="grid w-2/6 min-w-sm items-start gap-1.5">
-        <ScrollArea className="h-screen pt-12 px-12 relative">
-          <h1 className=" text-3xl"> Docker-Compose.yml</h1>
+    <main className="h-screen overflow-hidden">
+      <Header/>
+      <div className="flex flex-row">
+
+      <div className="grid w-2/6 min-w-sm items-start gap-1.5 dark:bg-gray-900 b-stone-200 rounded-r-md">
+        <ScrollArea className="h-screen pt-8 px-12 relative" >
           <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)}>
-              <div className="mt-10 space-y-4">
+            <form onSubmit={methods.handleSubmit(onSubmit)} >
+              <div className="mt-2 space-y-4">
                 <div className="space-y-2">
                   <Label className="">Version</Label>
                   <Input
@@ -115,27 +131,36 @@ export default function Home() {
                     </AccordionItem>
                   </Accordion>
                 ))}
-
-                <Button type="button" onClick={appendService}>
+                <div className="pt-10">
+                <Button className="" type="button" onClick={appendService}>
                   Add
                 </Button>
+                </div>
+               
               </div>
-              <Button type="submit" className="my-4">
+              <div className="pb-32">
+              <Button type="submit" className="mt-8">
                 Submit
               </Button>
+
+              </div>
+              
             </form>
           </FormProvider>
         </ScrollArea>
       </div>
-      <div className="mt-20 pt-12 px-12 bg-grey-900 text-lg font-semibold w-1/2">
+      <div className="bg-grey-900 text-lg font-semibold flex-1">
         <AceEditor
           mode="yaml"
-          theme="dracula" // Choose your preferred theme
+          theme={theme === 'dark' ? "dracula" : "github"} // Choose your preferred theme
           value={yamlData}
           readOnly={true} // Make the editor read-only if needed
-          style={{ width: "100%", height: "600px" }} // Adjust the size as needed
+          style={{ width: "100%", height: "100%" }} // Adjust the size as needed
         />
       </div>
+        
+      </div>
+     
     </main>
   );
 }
