@@ -13,21 +13,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { CircleX, Divide } from "lucide-react";
-import yaml from "yaml";
+import { CircleX } from "lucide-react";
 import jsyaml from "js-yaml";
-import MyComponent from "@/components/Visual";
 import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTheme } from "next-themes";
-import dynamic from "next/dynamic";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-yaml";
 import "ace-builds/src-noconflict/theme-dracula";
 import 'ace-builds/src-noconflict/theme-github'
-
 import Header from "@/components/DockerFormComponents/Header";
-import "./globals.css";
 
 const initialData: IDockerForm = {
   version: "1",
