@@ -69,8 +69,8 @@ export default function Home() {
   };
 
   return (
-    <main className="flex h-screen flex-row items-start justify-around">
-      <div className="grid w-1/4 min-w-sm items-start gap-1.5">
+    <main className="flex h-screen flex-row items-start justify-around overflow-hidden">
+      <div className="grid w-2/6 min-w-sm items-start gap-1.5">
         <ScrollArea className="h-screen pt-12 px-12 relative">
           <h1 className=" text-3xl"> Docker-Compose.yml</h1>
           <FormProvider {...methods}>
