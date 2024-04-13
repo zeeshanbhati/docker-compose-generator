@@ -3,8 +3,14 @@ import { Input } from "@/components/ui/input";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { CircleX } from "lucide-react";
+import { ErrorMessage } from "@hookform/error-message";
+
 export const PortMapping = ({ serviceIndex }: { serviceIndex: number }) => {
-  const { register, control } = useFormContext();
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: `services[${serviceIndex}].port`,
@@ -23,18 +29,41 @@ export const PortMapping = ({ serviceIndex }: { serviceIndex: number }) => {
       <Label className="block">Port Mapping</Label>
       {fields.map((field, index) => (
         <div className="flex space-x-2" key={field.id}>
-          <Input
-            placeholder="containerport"
-            {...register(
-              `services[${serviceIndex}].value.ports[${index}].container_port`
-            )}
-          />
-          <Input
-            placeholder="hostPort"
-            {...register(
-              `services[${serviceIndex}].value.ports[${index}].host_port`
-            )}
-          />
+          <div className="space-y-2">
+            <Input
+              placeholder="containerport"
+              {...register(
+                `services[${serviceIndex}].value.ports[${index}].container_port`,
+                { required: "Required" }
+              )}
+            />
+
+            <ErrorMessage
+              errors={errors}
+              name={`services[${serviceIndex}].value.ports[${index}].container_port`}
+              render={({ message }) => (
+                <p className="text-red-500">{message}</p>
+              )}
+            />
+          </div>
+
+          <div>
+            <Input
+              placeholder="hostPort"
+              {...register(
+                `services[${serviceIndex}].value.ports[${index}].host_port`,
+                { required: "Required" }
+              )}
+            />
+            <ErrorMessage
+              errors={errors}
+              name={`services[${serviceIndex}].value.ports[${index}].host_port`}
+              render={({ message }) => (
+                <p className="text-red-500">{message}</p>
+              )}
+            />
+          </div>
+
           <Button
             size={"icon"}
             type="button"

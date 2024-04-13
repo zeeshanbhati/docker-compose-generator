@@ -16,13 +16,17 @@ import { VolumeMapping } from "./VolumeMapping";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { CircleX } from "lucide-react";
-import { ErrorMessage } from '@hookform/error-message';
+import { ErrorMessage } from "@hookform/error-message";
 
 let x = 0;
 
 export const ServiceForm = ({ index }: { index: number }) => {
   const methods = useFormContext();
-  const { register, setValue , formState:{errors}} = methods;
+  const {
+    register,
+    setValue,
+    formState: { errors },
+  } = methods;
   const [buildRequired, setBuildRequired] = useState(false);
 
   console.log(++x);
@@ -34,33 +38,33 @@ export const ServiceForm = ({ index }: { index: number }) => {
 
   return (
     <div className="space-y-4">
-
-        <div className="space-y-2">
+      <div className="space-y-2">
         <Label className="">Service Name</Label>
         <Input
           id="service-name"
           placeholder="Service Name"
-          {...register(`services[${index}].key`, { required : "Required"})}
+          {...register(`services[${index}].key`, { required: "Required" })}
         />
-        <ErrorMessage  
+        <ErrorMessage
           errors={errors}
-          name={`services[${index}].key`} 
+          name={`services[${index}].key`}
           render={({ message }) => <p className="text-red-500">{message}</p>}
-         /> 
-         </div>
-    
+        />
+      </div>
 
       <div className="space-y-2">
         <Label>Container Name</Label>
         <Input
           placeholder="node-app-container"
-          {...register(`services[${index}].value.container_name` , {required : "Required" })}
+          {...register(`services[${index}].value.container_name`, {
+            required: "Required",
+          })}
         />
-          <ErrorMessage  
+        <ErrorMessage
           errors={errors}
-          name={`services[${index}].value.container_name`} 
+          name={`services[${index}].value.container_name`}
           render={({ message }) => <p className="text-red-500">{message}</p>}
-         /> 
+        />
       </div>
 
       <div className="flex items-center space-x-2">
@@ -73,14 +77,16 @@ export const ServiceForm = ({ index }: { index: number }) => {
         </label>
       </div>
 
-      {buildRequired && <BuildForm serviceIndex={index}/>}
+      {buildRequired && <BuildForm serviceIndex={index} />}
 
       {!buildRequired && (
         <div>
           <Label>Image Name</Label>
           <Input
             placeholder="mysql:latest"
-            {...register(`services[${index}].value.image`,{required : !buildRequired ? "Required" : false})}
+            {...register(`services[${index}].value.image`, {
+              required: !buildRequired ? "Required" : false,
+            })}
           />
         </div>
       )}
@@ -227,7 +233,10 @@ export const BackupServiceForm = () => {
 
 const BuildDependencies = ({ serviceIndex }: { serviceIndex: number }) => {
   const methods = useFormContext();
-  const { register } = methods;
+  const {
+    register,
+    formState: { errors },
+  } = methods;
   const { fields, append, remove } = useFieldArray({
     name: `services[${serviceIndex}].depends_on`,
   });
@@ -246,13 +255,24 @@ const BuildDependencies = ({ serviceIndex }: { serviceIndex: number }) => {
       {fields.map((field, index) => {
         return (
           <div key={field.id} className="flex space-x-2">
-            <Input
-              placeholder="Build Dependencies"
-              key={field.id}
-              {...register(
-                `services[${serviceIndex}].value.depends_on[${index}].key`
-              )}
-            />
+            <div className="space-y-2">
+              <Input
+                placeholder="Build Dependencies"
+                key={field.id}
+                {...register(
+                  `services[${serviceIndex}].value.depends_on[${index}].key`,
+                  { required: "Required" }
+                )}
+              />
+
+              <ErrorMessage
+                errors={errors}
+                name={`services[${serviceIndex}].value.depends_on[${index}].key`}
+                render={({ message }) => (
+                  <p className="text-red-500">{message}</p>
+                )}
+              />
+            </div>
             <Button
               size={"icon"}
               variant={"ghost"}
@@ -273,7 +293,11 @@ const BuildDependencies = ({ serviceIndex }: { serviceIndex: number }) => {
 
 const EnvironmentVariables = ({ serviceIndex }: { serviceIndex: number }) => {
   const methods = useFormContext();
-  const { register, control } = methods;
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = methods;
   const { fields, append, remove } = useFieldArray({
     control,
     name: `services[${serviceIndex}].value.environment`,
@@ -292,18 +316,42 @@ const EnvironmentVariables = ({ serviceIndex }: { serviceIndex: number }) => {
       {fields.map((field, index) => {
         return (
           <div key={field.id} className="flex space-x-2">
-            <Input
-              placeholder="Key"
-              {...register(
-                `services[${serviceIndex}].value.environment[${index}].key`
-              )}
-            />
-            <Input
-              placeholder="value"
-              {...register(
-                `services[${serviceIndex}].value.environment[${index}].value`
-              )}
-            />
+            <div className="space-y-2">
+              <Input
+                placeholder="Key"
+                {...register(
+                  `services[${serviceIndex}].value.environment[${index}].key`,
+                  { required: "Required" }
+                )}
+              />
+
+              <ErrorMessage
+                errors={errors}
+                name={`services[${serviceIndex}].value.environment[${index}].key`}
+                render={({ message }) => (
+                  <p className="text-red-500">{message}</p>
+                )}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Input
+                placeholder="value"
+                {...register(
+                  `services[${serviceIndex}].value.environment[${index}].value`,
+                  { required: "Required" }
+                )}
+              />
+
+              <ErrorMessage
+                errors={errors}
+                name={`services[${serviceIndex}].value.environment[${index}].value`}
+                render={({ message }) => (
+                  <p className="text-red-500">{message}</p>
+                )}
+              />
+            </div>
+
             <Button
               size={"icon"}
               variant={"ghost"}
