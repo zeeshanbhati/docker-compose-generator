@@ -16,12 +16,13 @@ import { VolumeMapping } from "./VolumeMapping";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { CircleX } from "lucide-react";
+import { ErrorMessage } from '@hookform/error-message';
 
 let x = 0;
 
 export const ServiceForm = ({ index }: { index: number }) => {
   const methods = useFormContext();
-  const { register, setValue } = methods;
+  const { register, setValue , formState:{errors}} = methods;
   const [buildRequired, setBuildRequired] = useState(false);
 
   console.log(++x);
@@ -33,21 +34,33 @@ export const ServiceForm = ({ index }: { index: number }) => {
 
   return (
     <div className="space-y-4">
-      <div>
+
+        <div className="space-y-2">
         <Label className="">Service Name</Label>
         <Input
           id="service-name"
           placeholder="Service Name"
-          {...register(`services[${index}].key`)}
+          {...register(`services[${index}].key`, { required : "Required"})}
         />
-      </div>
+        <ErrorMessage  
+          errors={errors}
+          name={`services[${index}].key`} 
+          render={({ message }) => <p className="text-red-500">{message}</p>}
+         /> 
+         </div>
+    
 
-      <div>
+      <div className="space-y-2">
         <Label>Container Name</Label>
         <Input
           placeholder="node-app-container"
-          {...register(`services[${index}].value.container_name`)}
+          {...register(`services[${index}].value.container_name` , {required : "Required" })}
         />
+          <ErrorMessage  
+          errors={errors}
+          name={`services[${index}].value.container_name`} 
+          render={({ message }) => <p className="text-red-500">{message}</p>}
+         /> 
       </div>
 
       <div className="flex items-center space-x-2">
@@ -60,14 +73,14 @@ export const ServiceForm = ({ index }: { index: number }) => {
         </label>
       </div>
 
-      {buildRequired && <BuildForm serviceIndex={index} />}
+      {buildRequired && <BuildForm serviceIndex={index}/>}
 
       {!buildRequired && (
         <div>
           <Label>Image Name</Label>
           <Input
             placeholder="mysql:latest"
-            {...register(`services[${index}].value.image`)}
+            {...register(`services[${index}].value.image`,{required : !buildRequired ? "Required" : false})}
           />
         </div>
       )}
