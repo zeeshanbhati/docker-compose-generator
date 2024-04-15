@@ -86,15 +86,26 @@ export const convertToDestObject = (sourceObj: IDockerForm) => {
   return res;
 };
 
-function removeEmptyValues(obj: any): void {
-  return Object.fromEntries(
-    Object.entries(obj)
-      .map(([key, value]) => {
-        if (typeof value === "object" && value !== null) {
-          return [key, removeEmptyValues(value)];
+function removeEmptyValues(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.filter((value) => value !== "" && value !== null);
+  }
+
+  if (typeof obj === "object" && obj !== null) {
+    const newObj: any = {};
+    for (const key in obj) {
+      const value = obj[key];
+      if (typeof value === "object" && value !== null) {
+        const cleanedValue = removeEmptyValues(value);
+        if (Object.keys(cleanedValue).length > 0) {
+          newObj[key] = cleanedValue;
         }
-        return [key, value];
-      })
-      .filter(([_, value]) => value !== "" && value !== null)
-  );
+      } else if (value !== "" && value !== null) {
+        newObj[key] = value;
+      }
+    }
+    return newObj;
+  }
+
+  return obj;
 }
