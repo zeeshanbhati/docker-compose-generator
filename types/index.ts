@@ -18,7 +18,7 @@ export interface IServiceValue {
   volumes?: IVolume[];
   depends_on?: IDependsOn[];
   environment?: IKeyValue[];
-  healthcheck?: IHealthCheck | null;
+  healthcheck?: IHealthCheck;
 }
 
 interface IBuild {

@@ -6,14 +6,30 @@ export const convertToDestObject = (sourceObj: IDockerForm) => {
     services: {},
   };
 
-  console.log(sourceObj);
-
   sourceObj.services.forEach((service) => {
     const parsedService: any = {};
     const serviceKey = service.key;
     const serviceValue = service.value;
-
+    // const serviceValueWithoutBuildImage: Omit<
+    //   IServiceValue,
+    //   "image" | "build"
+    // > = service.value;
     const buildRequired = service.buildRequired;
+
+    // const buildObject =
+    //   buildRequired && serviceValue.build
+    //     ? {
+    //         build: {
+    //           ...serviceValue.build,
+    //           args: serviceValue.build.args.reduce((acc, arg) => {
+    //             acc[arg.key] = arg.value;
+    //             return acc;
+    //           }, {} as any),
+    //         },
+    //       }
+    //     : {};
+
+    // const imageObject = !buildRequired ? { image: serviceValue.image } : {};
 
     console.log(buildRequired);
     console.log(serviceValue.build);
@@ -36,12 +52,7 @@ export const convertToDestObject = (sourceObj: IDockerForm) => {
     }
 
     if (serviceValue.healthcheck) {
-      const doesValueExist = Object.entries(serviceValue.healthcheck).filter(
-        ([key, value]) => value.length > 0
-      );
-      console.log(doesValueExist);
-      if (doesValueExist.length > 0)
-        parsedService["healthcheck"] = serviceValue.healthcheck;
+      parsedService["healthcheck"] = serviceValue.healthcheck;
     }
 
     if (serviceValue.container_name) {
@@ -55,15 +66,13 @@ export const convertToDestObject = (sourceObj: IDockerForm) => {
     }
 
     if (serviceValue.environment) {
-      if (Object.keys(serviceValue.environment).length > 0) {
-        parsedService["environment"] = serviceValue?.environment.reduce(
-          (acc, env) => {
-            acc[env.key] = env.value;
-            return acc;
-          },
-          {} as any
-        );
-      }
+      parsedService["environment"] = serviceValue?.environment.reduce(
+        (acc, env) => {
+          acc[env.key] = env.value;
+          return acc;
+        },
+        {} as any
+      );
     }
 
     if (serviceValue.ports) {
@@ -78,23 +87,24 @@ export const convertToDestObject = (sourceObj: IDockerForm) => {
       );
     }
 
+    // destObj.services[serviceKey] = {
+    //   ...serviceValueWithoutBuildImage,
+    //   ...buildObject,
+    //   ...imageObject,
+    //   environment: serviceValue?.environment.reduce((acc, env) => {
+    //     acc[env.key] = env.value;
+    //     return acc;
+    //   }, {} as any),
+    //   ports: serviceValue?.ports.map(
+    //     (port) => `${port.container_port}:${port.host_port}`
+    //   ),
+    //   depends_on: serviceValue?.depends_on.map((dependency) => dependency.key),
+    //   volumes: serviceValue?.volumes.map(
+    //     (volume) => `${volume.container_path}:${volume.host_path}`
+    //   ),
+    // };
     destObj.services[serviceKey] = parsedService;
   });
 
-  const res = removeEmptyValues(destObj);
-
-  return res;
+  return destObj;
 };
-
-function removeEmptyValues(obj: any): void {
-  return Object.fromEntries(
-    Object.entries(obj)
-      .map(([key, value]) => {
-        if (typeof value === "object" && value !== null) {
-          return [key, removeEmptyValues(value)];
-        }
-        return [key, value];
-      })
-      .filter(([_, value]) => value !== "" && value !== null)
-  );
-}
