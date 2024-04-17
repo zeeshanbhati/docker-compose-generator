@@ -6,6 +6,8 @@ export const convertToDestObject = (sourceObj: IDockerForm) => {
     services: {},
   };
 
+  console.log(sourceObj);
+
   sourceObj.services.forEach((service) => {
     const parsedService: any = {};
     const serviceKey = service.key;

@@ -13,7 +13,7 @@ export const PortMapping = ({ serviceIndex }: { serviceIndex: number }) => {
   } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `services[${serviceIndex}].port`,
+    name: `services[${serviceIndex}].value.ports`,
   });
 
   const addPortMapping = () => {

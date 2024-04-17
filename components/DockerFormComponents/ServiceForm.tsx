@@ -108,7 +108,7 @@ const BuildDependencies = ({ serviceIndex }: { serviceIndex: number }) => {
     formState: { errors },
   } = methods;
   const { fields, append, remove } = useFieldArray({
-    name: `services[${serviceIndex}].depends_on`,
+    name: `services[${serviceIndex}].value.depends_on`,
   });
 
   const addDependsOn = () => {

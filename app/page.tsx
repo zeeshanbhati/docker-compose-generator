@@ -25,7 +25,7 @@ import "ace-builds/src-noconflict/theme-github";
 import Header from "@/components/DockerFormComponents/Header";
 
 const initialData: IDockerForm = {
-  version: "1",
+  version: "3",
   services: [],
 };
 

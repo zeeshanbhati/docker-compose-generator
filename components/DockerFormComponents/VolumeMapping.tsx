@@ -11,7 +11,7 @@ export const VolumeMapping = ({ serviceIndex }: { serviceIndex: number }) => {
     formState: { errors },
   } = useFormContext();
   const { fields, append, remove } = useFieldArray({
-    name: `services[${serviceIndex}].volume`,
+    name: `services[${serviceIndex}].value.volumes`,
   });
   return (
     <div className="space-y-2">
