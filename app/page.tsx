@@ -49,11 +49,8 @@ export default function Home() {
   };
 
   const onSubmit = (data: IDockerForm) => {
-    //console.log(data);
-    //console.log("=========================");
     const res = convertToDestObject(data);
     stringifyToYaml(res);
-    console.log(res);
   };
 
   const appendService = () => {
@@ -72,7 +69,7 @@ export default function Home() {
     <main className="h-screen overflow-hidden">
       <Header />
       <div className="flex flex-row">
-        <div className="grid w-2/6 min-w-sm items-start gap-1.5 dark:bg-gray-900 b-stone-200 rounded-r-md">
+        <div className="grid w-1/2 lg:w-2/6 min-w-sm items-start gap-1.5 dark:bg-gray-900 b-stone-200 rounded-r-md">
           <ScrollArea className="h-screen pt-8 px-12 relative">
             <FormProvider {...methods}>
               <form onSubmit={methods.handleSubmit(onSubmit)}>

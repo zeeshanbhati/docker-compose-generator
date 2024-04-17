@@ -6,18 +6,12 @@ export const convertToDestObject = (sourceObj: IDockerForm) => {
     services: {},
   };
 
-  console.log(sourceObj);
-
   sourceObj.services.forEach((service) => {
     const parsedService: any = {};
     const serviceKey = service.key;
     const serviceValue = service.value;
 
     const buildRequired = service.buildRequired;
-
-    console.log(buildRequired);
-    console.log(serviceValue.build);
-    console.log(serviceValue.image);
 
     if (buildRequired && serviceValue.build) {
       parsedService["build"] = {
@@ -39,7 +33,7 @@ export const convertToDestObject = (sourceObj: IDockerForm) => {
       const doesValueExist = Object.entries(serviceValue.healthcheck).filter(
         ([key, value]) => value.length > 0
       );
-      console.log(doesValueExist);
+
       if (doesValueExist.length > 0)
         parsedService["healthcheck"] = serviceValue.healthcheck;
     }
