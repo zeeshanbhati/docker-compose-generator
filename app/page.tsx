@@ -1,7 +1,6 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ServiceForm } from "@/components/DockerFormComponents/ServiceForm";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { IDockerForm } from "@/types";
@@ -15,7 +14,7 @@ import {
 } from "@/components/ui/accordion";
 import { CircleX } from "lucide-react";
 import jsyaml from "js-yaml";
-import { useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTheme } from "next-themes";
 import AceEditor from "react-ace";
@@ -23,6 +22,7 @@ import "ace-builds/src-noconflict/mode-yaml";
 import "ace-builds/src-noconflict/theme-dracula";
 import "ace-builds/src-noconflict/theme-github";
 import Header from "@/components/DockerFormComponents/Header";
+import debounce from "lodash.debounce";
 
 const initialData: IDockerForm = {
   version: "3",
@@ -32,12 +32,34 @@ const initialData: IDockerForm = {
 export default function Home() {
   const { theme } = useTheme();
   const methods = useForm({ defaultValues: initialData });
-  const { register, control } = methods;
+  const { control, watch } = methods;
   const { fields, remove, append } = useFieldArray({
     control,
     name: "services",
   });
   const [yamlData, setYamlData] = useState<string>();
+
+  const handleFormValueChangeDebounced = useRef<Function>(null);
+
+  const handleFormValueChange = useCallback((formData: any) => {
+    console.log("Form values changed:", formData);
+    // Do something with the updated values
+  }, []);
+
+  //@ts-ignore
+  handleFormValueChangeDebounced.current = debounce(
+    handleFormValueChange,
+    1000
+  );
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      if (handleFormValueChangeDebounced.current) {
+        handleFormValueChangeDebounced.current(value);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, handleFormValueChangeDebounced]);
 
   const stringifyToYaml = (obj: any) => {
     try {
@@ -70,7 +92,7 @@ export default function Home() {
       <Header />
       <div className="flex flex-row">
         <div className="grid w-1/2 lg:w-2/6 min-w-sm items-start gap-1.5 dark:bg-gray-900 b-stone-200 rounded-r-md">
-          <ScrollArea className="h-screen pt-8 px-12 relative">
+          <ScrollArea className="h-screen pt-6 px-12 relative">
             <FormProvider {...methods}>
               <form onSubmit={methods.handleSubmit(onSubmit)}>
                 <div className="mt-2 space-y-4">
@@ -133,8 +155,11 @@ export default function Home() {
             mode="yaml"
             theme={theme === "dark" ? "dracula" : "github"} // Choose your preferred theme
             value={yamlData}
+            showGutter={true}
             readOnly={true} // Make the editor read-only if needed
-            style={{ width: "100%", height: "100%", fontSize: "16px" }} // Adjust the size as needed
+            fontSize={14} // Adjust the font size as needed
+            lineHeight={19}
+            style={{ width: "100%", height: "100%" }} // Adjust the size as needed
           />
         </div>
       </div>
