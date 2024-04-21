@@ -20,6 +20,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@types/js-yaml": "^4.0.9",
     "@types/lodash.debounce": "^4.0.9",
+    "@vercel/speed-insights": "^1.0.10",
     "add": "^2.0.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
