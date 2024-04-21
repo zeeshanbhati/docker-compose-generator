@@ -41,8 +41,19 @@ export default function Home() {
 
   const handleFormValueChangeDebounced = useRef<Function>(null);
 
-  const handleFormValueChange = useCallback((formData: any) => {
-    console.log("Form values changed:", formData);
+
+  const stringifyToYaml = (obj: any) => {
+    try {
+      const yamlString = jsyaml.dump(obj);
+      setYamlData(yamlString);
+    } catch (error) {
+      console.error("Error stringifying to YAML:", error);
+    }
+  };
+
+  const handleFormValueChange = useCallback((formData: IDockerForm) => {
+    const res = convertToDestObject(formData);
+    stringifyToYaml(res);
     // Do something with the updated values
   }, []);
 
@@ -61,14 +72,6 @@ export default function Home() {
     return () => subscription.unsubscribe();
   }, [watch, handleFormValueChangeDebounced]);
 
-  const stringifyToYaml = (obj: any) => {
-    try {
-      const yamlString = jsyaml.dump(obj);
-      setYamlData(yamlString);
-    } catch (error) {
-      console.error("Error stringifying to YAML:", error);
-    }
-  };
 
   const onSubmit = (data: IDockerForm) => {
     const res = convertToDestObject(data);
