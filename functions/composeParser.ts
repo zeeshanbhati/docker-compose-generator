@@ -46,7 +46,7 @@ export const convertToDestObject = (sourceObj: IDockerForm) => {
 
     if (serviceValue.volumes) {
       parsedService["volumes"] = serviceValue?.volumes.map(
-        (volume) => `${volume.container_path}:${volume.host_path}`
+        (volume) => `${volume.host_path}:${volume.container_path}`
       );
     }
 

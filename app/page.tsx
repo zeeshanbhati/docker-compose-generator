@@ -42,7 +42,7 @@ export default function Home() {
   const handleFormValueChangeDebounced = useRef<Function>(null);
 
 
-  const stringifyToYaml = (obj: any) => {
+  const stringifyToYaml = (obj: unknown) => {
     try {
       const yamlString = jsyaml.dump(obj);
       setYamlData(yamlString);
